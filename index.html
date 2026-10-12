@@ -62,7 +62,7 @@ const message=t=>{el('authmessage').textContent=t};
 if(Object.values(firebaseConfig).some(x=>x.startsWith('REPLACE_'))||ALLOWED_UIDS.some(x=>x.startsWith('REPLACE_'))){message('尚未設定 Firebase：請依照附帶的設定教學填入 Firebase 專案資料及兩位使用者 UID。');el('signinbtn').disabled=true;el('resetbtn').disabled=true;}
 else{
  const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
- const shared=doc(db,'japan-trip-2027','shared');
+ const shared=doc(db,'japan-trip-2027','shared-test');
  let unsubscribe=null,initializing=false,ready=false,pending=null;
  const status=t=>{el('cloudstatus').textContent=t};
  window.japanCloudSave=data=>{if(!ready)return;pending=data;status('正在同步…');setDoc(shared,{packing:data.packing,tasks:data.tasks,budgets:data.budgets,itinerary:data.itinerary,expenses:data.expenses,twdRate:data.twdRate,updatedAt:new Date().toISOString()}).then(()=>{pending=null;status('已同步 · '+(auth.currentUser?.email||''))}).catch(e=>{status('同步失敗，請檢查網路／權限');console.error(e)})};
